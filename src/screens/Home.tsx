@@ -11,31 +11,36 @@ import {
   Image,
   VStack,
 } from "native-base"
-import Logo from '@assets/logo.png'
-import { GasPump,MapPin   } from 'phosphor-react-native'
 import { Header } from '@components/header'
 
-export function Home() {
-   const [tripName, setTripName] = useState("")
+export function Home(props: { navigation: { navigate: (arg0: string) => void } }) {
+
+   function handleNewTrip(){
+      props.navigation.navigate('new');
+   }
 
   return (
     <Container>
-     
-        <Title title="Bem Vindo ao Aventuras em Conta!" />
-        <Title title="Digite o nome da sua viagem" />
-        <NativeBaseInput
-          style={NativeInput}
-          onChangeText={setTripName}
-          autoCapitalize="sentences"
-          _focus={{
-            bg: "gray.800",
-            borderWidth: 1,
-            borderColor: "blue.500",
-          }}
-        />
+      <Header />
+      <Title
+        title="Bem Vindo ao Aventuras em Conta!"
+        subtitle="Digite o nome da sua viagem"
+      />
+      <NativeBaseInput
+        style={NativeInput}
+        mb={4}
+        placeholder="Nome da viagem!"
+        autoCapitalize="sentences"
+        _focus={{
+          bg: "gray.800",
+          borderWidth: 1,
+          borderColor: "blue.500",
+          fontFamily:'body',
+          fontSize: 'md'
+        }}
+      />
 
-        <Button title="Criar" />
-
+      <Button title="Criar" onPress={handleNewTrip} />
     </Container>
   )
 }

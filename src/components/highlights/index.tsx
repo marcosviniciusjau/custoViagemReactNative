@@ -1,16 +1,14 @@
 import { TouchableOpacityProps } from "react-native"
-import { Container,Subtitles, Titles } from "./styles"
+import { Container, Titles } from "./styles"
 
 type Props = TouchableOpacityProps & {
   title: string
-  subtitle: string
 }
 
-export function Title({ title,subtitle, ...rest }: Props) {
+export function Highlights({ title, ...rest }: Props) {
   return (
     <Container>
       <Titles>{title}</Titles>
-      <Subtitles>{subtitle}</Subtitles>
     </Container>
   )
 }

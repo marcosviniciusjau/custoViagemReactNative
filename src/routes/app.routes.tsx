@@ -6,10 +6,12 @@ import { Home } from "@screens/Home"
 import { List } from "@screens/List"
 import HomeSvg from "@assets/home.svg"
 import ListSvg from "@assets/list-solid.svg"
+import { NewTrip } from "@screens/NewTrip"
 
 type AppRoutes = {
   home: undefined;
-  list: undefined
+  list: undefined;
+  new:undefined
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -21,20 +23,21 @@ export function AppRoutes() {
 
    const iconSize = sizes[6]
   return (
-    <Navigator screenOptions={{
-      headerShown:false,
-      tabBarShowLabel:false,
-      tabBarActiveTintColor:colors.orange[500],
-      tabBarInactiveTintColor:colors.gray[200],
-      tabBarStyle:{
-        backgroundColor:colors.gray[600],
-        borderTopWidth:0,
-        height:Platform.OS ==='android' ? 'auto': 96,
-        paddingBottom:sizes[6],
-        paddingTop:sizes[6]
-      }
-    }}>
-      
+    <Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: colors.orange[500],
+        tabBarInactiveTintColor: colors.gray[200],
+        tabBarStyle: {
+          backgroundColor: colors.gray[600],
+          borderTopWidth: 0,
+          height: Platform.OS === "android" ? "auto" : 96,
+          paddingBottom: sizes[6],
+          paddingTop: sizes[6],
+        },
+      }}
+    >
       <Screen
         name="home"
         component={Home}
@@ -51,6 +54,15 @@ export function AppRoutes() {
         options={{
           tabBarIcon: ({ color }) => (
             <ListSvg fill={color} width={iconSize} height={iconSize} />
+          ),
+        }}
+      />
+      <Screen
+        name="new"
+        component={NewTrip}
+        options={{
+          tabBarButton: () => (
+          null
           ),
         }}
       />

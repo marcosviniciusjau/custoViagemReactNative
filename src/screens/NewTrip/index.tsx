@@ -2,14 +2,13 @@ import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { Input } from '@components/input'
 import { tripCreate } from '@storage/trip/tripCreate'
-import { Container, NativeInput,Content} from './styles'
+import { Container,Containers, NativeInput,Content, IconGas, IconMap, IconMoney} from './styles'
 import { Button } from '@components/button'
-import { Title } from '@components/title'
 import { Label } from '@components/label'
 import {Input as NativeBaseInput,ScrollView} from "native-base"
 import { GasPump,MapPin } from 'phosphor-react-native'
 import { Header } from '@components/header'
-
+import { Highlights } from '@components/highlights'
 export function NewTrip() {
   const [tripOrigin, setTripOrigin] = useState("")
 
@@ -42,23 +41,30 @@ export function NewTrip() {
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
     >
-      <Content>
-        <Header showBackButton/>
-        <MapPin size={32} />
+      <Container>
+        <Header showBackButton />
+        <Containers>
+          <Highlights title=" Distância" />
+          <IconMap />
+        </Containers>
         <Label label="Origem" />
         <NativeBaseInput
           style={NativeInput}
           onChangeText={setTripOrigin}
+          mb={4}
+          placeholder="Origem da Viagem"
           autoCapitalize="sentences"
           _focus={{
             bg: "gray.800",
             borderWidth: 1,
             borderColor: "blue.500",
           }}
-        />{" "}
+        />
         <Label label="Destino" />
         <NativeBaseInput
           style={NativeInput}
+          mb={4}
+          placeholder="Destino da Viagem"
           onChangeText={setTripDestiny}
           autoCapitalize="sentences"
           _focus={{
@@ -70,34 +76,10 @@ export function NewTrip() {
         <Label label="Distância" />
         <NativeBaseInput
           style={NativeInput}
+          mb={4}
+          placeholder="Distância da Viagem"
           onChangeText={setTripDistancy}
-          keyboardType='numeric'
-          autoCapitalize="sentences"
-          _focus={{
-            bg: "gray.800",
-            borderWidth: 1,
-            borderColor: "blue.500",
-          }}
-        />{" "}
-        <Title title="Custo da Viagem: Combustivel" />
-        <GasPump size={32} />
-        <Label label="Eficiência por km/l" />
-        <NativeBaseInput
-          style={NativeInput}
-          onChangeText={setTripEficiency}
-          keyboardType='numeric'
-          autoCapitalize="sentences"
-          _focus={{
-            bg: "gray.800",
-            borderWidth: 1,
-            borderColor: "blue.500",
-          }}
-        />{" "}
-        <Label label="Preço combustivel" />
-        <NativeBaseInput
-          style={NativeInput}
-          onChangeText={setTripFuel}
-          keyboardType='numeric'
+          keyboardType="numeric"
           autoCapitalize="sentences"
           _focus={{
             bg: "gray.800",
@@ -105,10 +87,47 @@ export function NewTrip() {
             borderColor: "blue.500",
           }}
         />
-        <Title title="Custo da Viagem: Pedágios" />
+        <Containers>
+          <Highlights title=" Combustivel" />
+          <IconGas />
+        </Containers>
+        <Label label="Eficiência por km/l" />
+        <NativeBaseInput
+          style={NativeInput}
+          mb={4}
+          placeholder="Km/l"
+          onChangeText={setTripEficiency}
+          keyboardType="numeric"
+          autoCapitalize="sentences"
+          _focus={{
+            bg: "gray.800",
+            borderWidth: 1,
+            borderColor: "blue.500",
+          }}
+        />
+        <Label label="Preço combustivel" />
+        <NativeBaseInput
+          style={NativeInput}
+          mb={4}
+          onChangeText={setTripFuel}
+          placeholder="Preço do combustivel"
+          keyboardType="numeric"
+          autoCapitalize="sentences"
+          _focus={{
+            bg: "gray.800",
+            borderWidth: 1,
+            borderColor: "blue.500",
+          }}
+        />
+        <Containers>
+          <Highlights title="Pedágios" />
+          <IconMoney/>
+        </Containers>
         <Label label="Localização Pedágio" />
         <NativeBaseInput
           style={NativeInput}
+          mb={4}
+          placeholder="Localização do Pedágio"
           onChangeText={setTripLocal}
           autoCapitalize="sentences"
           _focus={{
@@ -120,17 +139,19 @@ export function NewTrip() {
         <Label label="Preço pedágio" />
         <NativeBaseInput
           style={NativeInput}
+          mb={4}
+          placeholder="Preço do pedágio"
           onChangeText={setTripToll}
           autoCapitalize="sentences"
-          keyboardType='numeric'
+          keyboardType="numeric"
           _focus={{
             bg: "gray.800",
             borderWidth: 1,
             borderColor: "blue.500",
           }}
         />
-        <Button title="Criar nova viagem" />
-      </Content>
+        <Button title="Criar nova viagem" style={{ marginTop: 20 }} />
+      </Container>
     </ScrollView>
   )
 }
