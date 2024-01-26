@@ -3,13 +3,13 @@ import { createBottomTabNavigator,BottomTabNavigationProp } from "@react-navigat
 
 import { useTheme } from "native-base"
 import { Home } from "@screens/Home"
-import { History } from "@screens/History"
+import { List } from "@screens/List"
 import HomeSvg from "@assets/home.svg"
-import HistorySvg from "@assets/history.svg"
+import ListSvg from "@assets/list-solid.svg"
 
 type AppRoutes = {
   home: undefined;
-  history: undefined
+  list: undefined
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -46,11 +46,11 @@ export function AppRoutes() {
       />
 
       <Screen
-        name="history"
-        component={History}
+        name="list"
+        component={List}
         options={{
           tabBarIcon: ({ color }) => (
-            <HistorySvg fill={color} width={iconSize} height={iconSize} />
+            <ListSvg fill={color} width={iconSize} height={iconSize} />
           ),
         }}
       />
