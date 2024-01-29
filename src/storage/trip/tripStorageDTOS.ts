@@ -1,7 +1,6 @@
 import { Double } from "react-native/Libraries/Types/CodegenTypes"
 
 export type TripStorageDTO = {
-  name: string
   origin: string
   destiny:string
   distancy:Double

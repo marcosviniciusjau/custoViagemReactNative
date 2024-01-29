@@ -1,27 +1,30 @@
 import { Platform } from "react-native"
-import { createBottomTabNavigator,BottomTabNavigationProp } from "@react-navigation/bottom-tabs"
+import {
+  createBottomTabNavigator,
+  BottomTabNavigationProp,
+} from "@react-navigation/bottom-tabs"
 
 import { useTheme } from "native-base"
 import { Home } from "@screens/Home"
 import { List } from "@screens/List"
 import HomeSvg from "@assets/home.svg"
 import ListSvg from "@assets/list-solid.svg"
-import { NewTrip } from "@screens/NewTrip"
+import { NewTrip } from "@screens/NewTrip/NewTrip"
 
 type AppRoutes = {
-  home: undefined;
-  list: undefined;
-  new:undefined
+  home: undefined
+  list: undefined
+  new: undefined
 }
 
-export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
+export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>
 
 const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>()
 
 export function AppRoutes() {
-   const { sizes, colors } = useTheme()
+  const { sizes, colors } = useTheme()
 
-   const iconSize = sizes[6]
+  const iconSize = sizes[6]
   return (
     <Navigator
       screenOptions={{
@@ -61,9 +64,7 @@ export function AppRoutes() {
         name="new"
         component={NewTrip}
         options={{
-          tabBarButton: () => (
-          null
-          ),
+          tabBarButton: () => null,
         }}
       />
     </Navigator>

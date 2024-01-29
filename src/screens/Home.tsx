@@ -1,23 +1,25 @@
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { Input } from '@components/input'
-import { tripCreate } from '@storage/trip/tripCreate'
+import { tripTitleCreate } from "@storage/tripTitle/tripTitleCreate"
 import { Container, NativeInput} from './styles'
 import { Button } from '@components/button'
 import { Title } from '@components/title'
-import {
-  Input as NativeBaseInput,ScrollView,
-  Center,
-  Image,
-  VStack,
-} from "native-base"
+import {Input as NativeBaseInput} from "native-base"
 import { Header } from '@components/header'
 
-export function Home(props: { navigation: { navigate: (arg0: string) => void } }) {
+export function Home() {
+   const [title,setTitle]= useState('')
 
-   function handleNewTrip(){
-      props.navigation.navigate('new');
-   }
+  const navigation= useNavigation()
+
+  async function handleNewTrip() {
+    try {
+      await tripTitleCreate(title)
+      navigation.navigate('new', { title })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <Container>
@@ -36,8 +38,10 @@ export function Home(props: { navigation: { navigate: (arg0: string) => void } }
           borderWidth: 1,
           borderColor: "blue.500",
           fontFamily:'body',
-          fontSize: 'md'
+          fontSize: 'md',
+          color:'white'
         }}
+        onChangeText={setTitle}
       />
 
       <Button title="Criar" onPress={handleNewTrip} />

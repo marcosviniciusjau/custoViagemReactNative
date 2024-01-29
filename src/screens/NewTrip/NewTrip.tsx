@@ -1,51 +1,34 @@
 import { useState } from "react"
 import { useNavigation } from "@react-navigation/native"
-import { Input } from "@components/input"
 import { tripCreate } from "@storage/trip/tripCreate"
 import { Container, NativeInput } from "./styles"
 import { Button } from "@components/button"
-import { Title } from "@components/title"
-import {
-  Input as NativeBaseInput,
-  ScrollView,
-  Center,
-  Image,
-  VStack,
-} from "native-base"
+import { Input as NativeBaseInput, ScrollView } from "native-base"
 import { Header } from "@components/header"
 import { Containers, IconGas, IconMap, IconMoney } from "./styles"
 import { Highlights } from "@components/highlights"
 import { Label } from "@components/label"
-import { Titles } from "@components/highlights/styles"
 
 export function NewTrip() {
   const [origin, setOrigin] = useState("")
 
   const [destiny, setDestiny] = useState("")
 
-  const [distance, setDistance] = useState(0.0)
+  const [distance, setDistance] = useState(0)
 
-  const [efficiency, setEfficiency] = useState(0.0)
+  const [efficiency, setEfficiency] = useState(0)
 
-  const [fuel, setFuel] = useState(0.0)
+  const [fuel, setFuel] = useState(0)
 
   const [local, setLocal] = useState("")
 
-  const [toll, setToll] = useState(0.0)
+  const [toll, setToll] = useState(0)
 
   const navigation = useNavigation()
 
   async function handleNewTrip() {
     try {
-      await tripCreate(
-        origin,
-        destiny,
-        distance,
-        efficiency,
-        fuel,
-        local,
-        toll
-      )
+      await tripCreate(origin, destiny, distance, efficiency, fuel, local, toll)
       navigation.navigate("trips", {
         origin,
         destiny,

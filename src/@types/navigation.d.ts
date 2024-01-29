@@ -1,18 +1,19 @@
+
 export declare global {
   namespace ReactNavigation {
     interface RootParamList {
-      new: undefined
-      home:undefined
-      trips:{
-        name: string
+      home: undefined
+      new:{
+        title:string
+      }
+      trips: {
         origin: string
-        destiny:string
-        distancy:Double
-        eficiency:Double
-        fuel:Double
-        local:string
-        tall:string
-
+        destiny: string
+        distance: number
+        efficiency: number
+        fuel: number
+        local: string
+        toll: number
       }
     }
   }
