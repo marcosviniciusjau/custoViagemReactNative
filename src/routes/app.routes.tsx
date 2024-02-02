@@ -9,12 +9,15 @@ import { Home } from "@screens/Home"
 import { List } from "@screens/List"
 import HomeSvg from "@assets/home.svg"
 import ListSvg from "@assets/list-solid.svg"
-import { NewTrip } from "@screens/NewTrip/NewTrip"
+import { NewTrip } from "@screens/NewTrip"
+import { TripDetails } from "@screens/TripDetail"
+import { EditTrip } from "@screens/EditTrip"
 
 type AppRoutes = {
   home: undefined
-  list: undefined
+  trips: undefined
   new: undefined
+  edit:undefined
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>
@@ -52,7 +55,7 @@ export function AppRoutes() {
       />
 
       <Screen
-        name="list"
+        name="trips"
         component={List}
         options={{
           tabBarIcon: ({ color }) => (
@@ -63,6 +66,13 @@ export function AppRoutes() {
       <Screen
         name="new"
         component={NewTrip}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
+      <Screen
+        name="edit"
+        component={EditTrip}
         options={{
           tabBarButton: () => null,
         }}

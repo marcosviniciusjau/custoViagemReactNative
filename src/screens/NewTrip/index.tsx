@@ -1,64 +1,52 @@
 import { useState } from "react"
-import { useNavigation } from "@react-navigation/native"
-import { Input } from "@components/input"
+import { useNavigation, useRoute } from "@react-navigation/native"
+
 import { tripCreate } from "@storage/trip/tripCreate"
 import { Container, NativeInput } from "./styles"
 import { Button } from "@components/button"
 import { Title } from "@components/title"
-import {
-  Input as NativeBaseInput,
-  ScrollView,
-  Center,
-  Image,
-  VStack,
-} from "native-base"
+import {Input as NativeBaseInput,ScrollView} from "native-base"
+
 import { Header } from "@components/header"
 import { Containers, IconGas, IconMap, IconMoney } from "./styles"
-import { Highlights } from "@components/highlights"
 import { Label } from "@components/label"
-import { Titles } from "@components/highlights/styles"
+
+type RouteParams= {
+  title:string;
+}
 
 export function NewTrip() {
-  const [origin, setOrigin] = useState("")
+  const route= useRoute();
 
-  const [destiny, setDestiny] = useState("")
+  const { title }= route.params as RouteParams;
 
-  const [distance, setDistance] = useState(0.0)
+  const [origin, setOrigin] = useState("");
 
-  const [efficiency, setEfficiency] = useState(0.0)
+  const [destiny, setDestiny] = useState("");
 
-  const [fuel, setFuel] = useState(0.0)
+  const [distance, setDistance] = useState(0.0);
 
-  const [local, setLocal] = useState("")
+  const [efficiency, setEfficiency] = useState(0.0);
 
-  const [toll, setToll] = useState(0.0)
+  const [fuel, setFuel] = useState(0.0);
 
-  const navigation = useNavigation()
+  const [local, setLocal] = useState("");
+
+  const [toll, setToll] = useState(0.0);
+
+  const navigation = useNavigation();
 
   async function handleNewTrip() {
     try {
-      await tripCreate(
-        origin,
-        destiny,
-        distance,
-        efficiency,
-        fuel,
-        local,
-        toll
-      )
+      await tripCreate(title,origin, destiny, distance, efficiency, fuel, local, toll)
       navigation.navigate("trips", {
-        origin,
-        destiny,
-        distance,
-        efficiency,
-        fuel,
-        local,
-        toll,
+        title
       })
     } catch (error) {
       console.log(error)
     }
   }
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -66,16 +54,21 @@ export function NewTrip() {
     >
       <Container>
         <Header showBackButton />
+
+        <Title title={title} />
+
         <Containers>
-          <Highlights title=" Distância" />
+          <Title title="Distância" />
           <IconMap />
         </Containers>
+
         <Label label="Origem" />
         <NativeBaseInput
           style={NativeInput}
           onChangeText={setOrigin}
           mb={4}
           placeholder="Origem da Viagem"
+          color="white"
           autoCapitalize="sentences"
           _focus={{
             bg: "gray.800",
@@ -89,6 +82,7 @@ export function NewTrip() {
           mb={4}
           placeholder="Destino da Viagem"
           onChangeText={setDestiny}
+          color="white"
           autoCapitalize="sentences"
           _focus={{
             bg: "gray.800",
@@ -104,6 +98,7 @@ export function NewTrip() {
           onChangeText={(text) => setDistance(Number(text))}
           keyboardType="numeric"
           autoCapitalize="sentences"
+          color="white"
           _focus={{
             bg: "gray.800",
             borderWidth: 1,
@@ -111,7 +106,7 @@ export function NewTrip() {
           }}
         />
         <Containers>
-          <Highlights title=" Combustivel" />
+          <Title title=" Combustivel" />
           <IconGas />
         </Containers>
         <Label label="Eficiência por km/l" />
@@ -122,6 +117,7 @@ export function NewTrip() {
           onChangeText={(text) => setEfficiency(Number(text))}
           keyboardType="numeric"
           autoCapitalize="sentences"
+          color="white"
           _focus={{
             bg: "gray.800",
             borderWidth: 1,
@@ -134,6 +130,7 @@ export function NewTrip() {
           mb={4}
           onChangeText={(text) => setFuel(Number(text))}
           placeholder="Preço do combustivel"
+          color="white"
           keyboardType="numeric"
           autoCapitalize="sentences"
           _focus={{
@@ -143,7 +140,7 @@ export function NewTrip() {
           }}
         />
         <Containers>
-          <Highlights title="Pedágios" />
+          <Title title="Pedágios" />
           <IconMoney />
         </Containers>
         <Label label="Localização Pedágio" />
@@ -152,6 +149,7 @@ export function NewTrip() {
           mb={4}
           placeholder="Localização do Pedágio"
           onChangeText={setLocal}
+          color="white"
           autoCapitalize="sentences"
           _focus={{
             bg: "gray.800",
@@ -165,6 +163,7 @@ export function NewTrip() {
           mb={4}
           placeholder="Preço do pedágio"
           onChangeText={(text) => setToll(Number(text))}
+          color="white"
           autoCapitalize="sentences"
           keyboardType="numeric"
           _focus={{

@@ -5,7 +5,7 @@ export async function tripsGetAll() {
   try{
   const storage = await AsyncStorage.getItem(TRIP_COLLECTION)
 
-  const trips: string[]= storage ? JSON.parse(storage) : [];
+  const trips: object[]= storage ? JSON.parse(storage) : [];
 
   return trips;
   }

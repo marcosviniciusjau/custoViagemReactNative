@@ -1,11 +1,11 @@
-import { Double } from "react-native/Libraries/Types/CodegenTypes"
 
 export type TripStorageDTO = {
+  title:string
   origin: string
   destiny:string
-  distancy:Double
-  eficiency:Double
-  fuel:Double
+  distance:number
+  efficiency:number
+  fuel:number
   local:string
-  tall:string
+  toll:number
 }

@@ -7,11 +7,12 @@ export const Container = styled.View`
 
   background-color: ${({ theme }) => theme.COLORS.GRAY_400};
 
-  flex-direction:row;
-  align-items:center;
+  flex-direction: row;
+  align-items: center;
 
-  margin-bottom:16px;
+  margin-bottom: 16px;
 
+  margin-top: 16px;
 `
 export const Text=  styled.Text`
   flex:1;

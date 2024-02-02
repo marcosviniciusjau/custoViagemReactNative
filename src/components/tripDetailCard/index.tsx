@@ -1,27 +1,17 @@
-import { Double } from 'react-native/Libraries/Types/CodegenTypes'
-import {Container,Icon, Text} from './styles'
+import { Container, Icon } from "./styles"
+import { Text } from "./styles"
 
 type Props = {
-  origin: string
-  destiny: string
-  distance: Double
-  efficiency: Double
-  fuel: Double
-  local: string
-  tall: string
+  title: string,
+  value:string | number
 }
 
-export function tripDetailCard({origin,destiny,distance,efficiency,fuel,local,tall}: Props){
+export function TripDetailCard({title,value}: Props) {
+
   return (
     <Container>
-      <Icon name="person" />
-      <Text>Origem: {origin}</Text>
-      <Text>Destino: {destiny}</Text>
-      <Text>Distancia{distance}</Text>
-      <Text>Eficiencia{efficiency}</Text>
-      <Text>Preco Combustivel{fuel}</Text>
-      <Text>Local do pedagio{local}</Text>
-      <Text>Preco do pedagio{tall}</Text>
+      <Icon name="airplanemode-active" />
+      <Text title={title}>{value}</Text>
     </Container>
   )
 }
