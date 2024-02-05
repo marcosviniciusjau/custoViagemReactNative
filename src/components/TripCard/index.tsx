@@ -1,7 +1,7 @@
 import { TouchableOpacityProps } from 'react-native'
-import { Container, Title } from './styles';
-import { Icon } from '@components/TripDetailCard/styles';
-import { Button } from '@components/button';
+import { Container, Title,Icon } from './styles';
+
+import { ButtonIcon } from '@components/ButtonIcon';
 
 type Props = TouchableOpacityProps & {
   title: string;
@@ -13,7 +13,8 @@ export function TripCard({ title, onRemove,...rest}: Props) {
     <Container {...rest}>
       <Icon name="airplanemode-active" />
       <Title>{title}</Title>
-      <Button title="excluir" onPress={onRemove}></Button>
+
+      <ButtonIcon onPress={onRemove} />
     </Container>
   )
 }

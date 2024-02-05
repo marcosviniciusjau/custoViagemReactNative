@@ -9,6 +9,7 @@ export async function tripTitleCreate(newTrip: string) {
     const storedTrips = await tripsTitlesGetAll()
 
     const storage = JSON.stringify([...storedTrips, newTrip])
+    console.log(storage)
 
     await AsyncStorage.setItem(TRIP_TITLE_COLLECTION, storage)
   } catch (error) {

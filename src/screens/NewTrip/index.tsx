@@ -14,33 +14,36 @@ import { Label } from "@components/label"
 type RouteParams= {
   title:string;
 }
+type NumericValue = string | number
 
 export function NewTrip() {
-  const route= useRoute();
+  const route = useRoute()
+  const { title } = route.params as RouteParams
 
-  const { title }= route.params as RouteParams;
+  const [origin, setOrigin] = useState("")
+  const [destiny, setDestiny] = useState("")
+  const [distance, setDistance] = useState<NumericValue>(0.0)
+  const [efficiency, setEfficiency] = useState<NumericValue>(0.0)
+  const [fuel, setFuel] = useState<NumericValue>(0.0)
+  const [local, setLocal] = useState("")
+  const [toll, setToll] = useState<NumericValue>(0.0)
 
-  const [origin, setOrigin] = useState("");
-
-  const [destiny, setDestiny] = useState("");
-
-  const [distance, setDistance] = useState(0.0);
-
-  const [efficiency, setEfficiency] = useState(0.0);
-
-  const [fuel, setFuel] = useState(0.0);
-
-  const [local, setLocal] = useState("");
-
-  const [toll, setToll] = useState(0.0);
-
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
   async function handleNewTrip() {
     try {
-      await tripCreate(title,origin, destiny, distance, efficiency, fuel, local, toll)
+      await tripCreate(
+        title,
+        origin,
+        destiny,
+        parseFloat(distance as string),
+        parseFloat(efficiency as string),
+        parseFloat(fuel as string),
+        local,
+        parseFloat(toll as string)
+      )
       navigation.navigate("trips", {
-        title
+        title,
       })
     } catch (error) {
       console.log(error)

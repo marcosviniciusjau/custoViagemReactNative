@@ -17,7 +17,7 @@ type AppRoutes = {
   home: undefined
   trips: undefined
   new: undefined
-  edit:undefined
+  edit: undefined
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>

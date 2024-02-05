@@ -18,12 +18,16 @@ export async function tripCreate(
   try {
     const storedTrips = await tripsGetAll()
 
-    const newTrip = [title,origin, destiny, distance, efficiency, fuel, local, toll]
-    const storage = JSON.stringify([ ...storedTrips,newTrip])
+    const newTrip = {title,origin, destiny, distance, efficiency, fuel, local, toll}
+    const updatedTrips = [...storedTrips, newTrip]
+
+    const storage = JSON.stringify(updatedTrips)
+    console.log(storage)
 
     await AsyncStorage.setItem(TRIP_COLLECTION, storage)
     
   } catch (error) {
+    console.log("Deu ruim")
     throw error
   }
 }

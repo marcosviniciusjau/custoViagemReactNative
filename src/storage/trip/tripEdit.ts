@@ -19,7 +19,7 @@ export async function tripEdit(updatedTrip:Trip)
 
   try {
     const storedTrips = await tripsGetAll()
-      const tripIndex = storedTrips.findIndex(
+    const tripIndex = storedTrips.findIndex(
         (storedTrip) => storedTrip.title === updatedTrip.title
       )
 
