@@ -14,7 +14,6 @@ export function Home() {
 
   const navigation = useNavigation()
 
-  
   async function handleNewTrip() {
     try {
       await tripTitleCreate(
@@ -28,7 +27,6 @@ export function Home() {
     }
   }
 
-
   return (
     <Container>
       <Header />
@@ -36,8 +34,8 @@ export function Home() {
         title="Bem Vindo ao Aventuras em Conta!"
         subtitle="Digite o nome da sua viagem"
       />
+
       <NativeBaseInput
-        style={NativeInput}
         mb={4}
         placeholder="Nome da viagem!"
         autoCapitalize="sentences"

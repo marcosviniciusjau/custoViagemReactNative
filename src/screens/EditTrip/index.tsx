@@ -5,21 +5,20 @@ import {
   useRoute,
 } from "@react-navigation/native"
 
-import { Container, NativeInput } from "./styles"
+import { Container } from "./styles"
 import { Button } from "@components/button"
 import { Title } from "@components/title"
 
 import { Input as NativeBaseInput, ScrollView } from "native-base"
-import { Input } from "@components/input"
+
 import { Header } from "@components/header"
 import { Containers, IconGas, IconMap, IconMoney } from "./styles"
 import { Label } from "@components/label"
 import { tripsGetAll } from "@storage/trip/tripsGetAll"
 import { FlatList } from "react-native"
-import { tripCreate } from "@storage/trip/tripCreate"
+
 import { tripEdit } from "@storage/trip/tripEdit"
-import { TripDetailCard } from "@components/TripDetailCard"
-import { TripCard } from "@components/TripCard"
+import { TripCalculateCard } from "@components/TripCalculateCard"
 
 type RouteParams = {
   title: string
@@ -33,32 +32,31 @@ export function EditTrip() {
   const navigation = useNavigation()
   const [editedValues, setEditedValues] = useState([])
   const [trips, setTrips] = useState<object[]>([])
+  const [calculatedCardsRendered] = useState(false)
 
   async function setUpdatedFields() {
-     try {
-        await tripEdit({ title, ...editedValues });
-
-        navigation.navigate('trips', {
-          title,
-        });
-      } catch (error) {
-          console.log(error);
-    }
-    }
-    
-  
-  async function fetchTrips() {
     try {
-      const data = await tripsGetAll()
+      await tripEdit({ title, ...editedValues })
 
-      setTrips(data)
-   
+      navigation.navigate("trips", {
+        title,
+      })
     } catch (error) {
       console.log(error)
     }
   }
 
-  function capitalizeFirstLetter(string) {
+  async function fetchTrips() {
+    try {
+      const data = await tripsGetAll()
+
+      setTrips(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1)
   }
 
@@ -75,11 +73,8 @@ export function EditTrip() {
     >
       <Container>
         <Header showBackButton />
-        <Title title={title} />
-        <Containers>
-          <Title title=" Distância" />
-          <IconMap />
-        </Containers>
+
+        <Label label="Cálculo de Gastos:" />
         <FlatList
           data={
             trips as Array<{
@@ -93,16 +88,38 @@ export function EditTrip() {
               toll: string
             }>
           }
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(index) => index.toString()}
           renderItem={({ item }) => (
             <>
               {title === item.title &&
                 Object.entries(item).map(([key, value]) => (
                   <>
+                    {key === "title" && !calculatedCardsRendered && (
+                      <>
+                        <Containers>
+                          <TripCalculateCard
+                            title=""
+                            value={`Combustível: ${
+                              (item.distance / item.efficiency) * item.fuel
+                            }`}
+                          />
+                          <TripCalculateCard
+                            title={"Gastos com Pedágio"}
+                            value={`Pedágio: ${item.toll}`}
+                          />
+                        </Containers>
+                      </>
+                    )}
                     {key === "efficiency" && (
                       <Containers>
                         <Title title=" Combustivel" />
                         <IconGas />
+                      </Containers>
+                    )}
+                    {key === "origin" && (
+                      <Containers>
+                        <Title title=" Distância" />
+                        <IconMap />
                       </Containers>
                     )}
                     {key === "local" && (
@@ -128,9 +145,7 @@ export function EditTrip() {
                       }}
                       key={key}
                       value={
-                        editedValues[key] !== undefined
-                          ? editedValues[key]
-                          : value.toString()
+                       value.toString()
                       }
                     />
                   </>

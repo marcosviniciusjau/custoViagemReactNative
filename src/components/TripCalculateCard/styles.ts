@@ -1,9 +1,10 @@
 import styled,{css} from "styled-components/native";
 import {MaterialIcons} from "@expo/vector-icons"
+import { GasPump, Money } from "phosphor-react-native";
 
 export const Container = styled.View`
   width: 100%;
-  height: 56px;
+  height: 100px;
 
   background-color: ${({ theme }) => theme.COLORS.GRAY_400};
 
@@ -16,19 +17,23 @@ export const Container = styled.View`
 `
 export const Text=  styled.Text`
   flex:1;
+  margin-left: 5%;
  ${({ theme }) => css `
  
   font-size: ${ theme.FONT_SIZE.MD}px;
-  color: ${theme.COLORS.GRAY_200};
+  color: ${theme.COLORS.ORANGE_500};
   font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
 
 `};
 `;
 
-export const Icon= styled(MaterialIcons).attrs(({theme})=>({
-  size:24,
-  color: theme.COLORS.GRAY_200
-}))`
-  margin-left:15px;
-  margin-right: 4px;
-`;
+export const IconGas = styled(GasPump).attrs(({ theme }) => ({
+  size: 36,
+  color: theme.COLORS.ORANGE_500,
+}))``
+
+
+export const IconMoney = styled(Money).attrs(({ theme }) => ({
+  size: 36,
+  color: theme.COLORS.ORANGE_500,
+}))``

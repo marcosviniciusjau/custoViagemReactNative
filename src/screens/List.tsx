@@ -67,8 +67,8 @@ function handleOpenTrip(title:string) {
           <>
           <TripCard
              title={item.title}
-             onPress={() => handleRemoveTrip(item.title)}
-             onRemove={()=> handleOpenTrip(item.title)}
+             onPress={() => handleOpenTrip(item.title)}
+             onRemove={()=> handleRemoveTrip(item.title)}
           />
           </>
         )}

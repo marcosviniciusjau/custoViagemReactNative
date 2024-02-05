@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigation, useRoute } from "@react-navigation/native"
 
 import { tripCreate } from "@storage/trip/tripCreate"
@@ -19,7 +19,9 @@ type NumericValue = string | number
 export function NewTrip() {
   const route = useRoute()
   const { title } = route.params as RouteParams
-
+  const parts= title.split('-')
+  const Ititle= title.includes('-')
+    
   const [origin, setOrigin] = useState("")
   const [destiny, setDestiny] = useState("")
   const [distance, setDistance] = useState<NumericValue>(0.0)
@@ -27,6 +29,15 @@ export function NewTrip() {
   const [fuel, setFuel] = useState<NumericValue>(0.0)
   const [local, setLocal] = useState("")
   const [toll, setToll] = useState<NumericValue>(0.0)
+
+  useEffect(() => {
+    if (Ititle) {
+      setOrigin(parts[0])
+      setDestiny(parts[1])
+    } else {
+      setDestiny(title)
+    }
+  }, [Ititle, parts, title])
 
   const navigation = useNavigation()
 
@@ -66,6 +77,7 @@ export function NewTrip() {
         </Containers>
 
         <Label label="Origem" />
+
         <NativeBaseInput
           style={NativeInput}
           onChangeText={setOrigin}
@@ -78,8 +90,11 @@ export function NewTrip() {
             borderWidth: 1,
             borderColor: "blue.500",
           }}
+          value={origin}
         />
+
         <Label label="Destino" />
+
         <NativeBaseInput
           style={NativeInput}
           mb={4}
@@ -92,8 +107,11 @@ export function NewTrip() {
             borderWidth: 1,
             borderColor: "blue.500",
           }}
+          value={destiny}
         />
+
         <Label label="Distância" />
+
         <NativeBaseInput
           style={NativeInput}
           mb={4}
@@ -108,11 +126,14 @@ export function NewTrip() {
             borderColor: "blue.500",
           }}
         />
+
         <Containers>
           <Title title=" Combustivel" />
           <IconGas />
         </Containers>
+
         <Label label="Eficiência por km/l" />
+
         <NativeBaseInput
           style={NativeInput}
           mb={4}
@@ -127,7 +148,9 @@ export function NewTrip() {
             borderColor: "blue.500",
           }}
         />
+
         <Label label="Preço combustivel" />
+
         <NativeBaseInput
           style={NativeInput}
           mb={4}
@@ -142,11 +165,14 @@ export function NewTrip() {
             borderColor: "blue.500",
           }}
         />
+
         <Containers>
           <Title title="Pedágios" />
           <IconMoney />
         </Containers>
+
         <Label label="Localização Pedágio" />
+
         <NativeBaseInput
           style={NativeInput}
           mb={4}
@@ -160,7 +186,9 @@ export function NewTrip() {
             borderColor: "blue.500",
           }}
         />
+
         <Label label="Preço pedágio" />
+
         <NativeBaseInput
           style={NativeInput}
           mb={4}
@@ -175,11 +203,13 @@ export function NewTrip() {
             borderColor: "blue.500",
           }}
         />
+
         <Button
           title="Criar nova viagem"
           style={{ marginTop: 20 }}
           onPress={handleNewTrip}
         />
+        
       </Container>
     </ScrollView>
   )

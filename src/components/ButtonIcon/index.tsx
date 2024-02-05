@@ -1,5 +1,5 @@
 
-import { TouchableOpacityProps } from 'react-native';
+import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
 import { Container, Icon } from './styles';
 
@@ -7,10 +7,12 @@ type Props = TouchableOpacityProps & {
 
 }
 
-export function ButtonIcon({}: Props) {
-  return(
-    <Container>
-      <Icon name="delete" type="SECONDARY" />
-    </Container>
+export function ButtonIcon({...rest}: Props) {
+  return (
+    <TouchableOpacity {...rest}>
+      <Container>
+        <Icon name="delete" type="SECONDARY" />
+      </Container>
+    </TouchableOpacity>
   )
 }
