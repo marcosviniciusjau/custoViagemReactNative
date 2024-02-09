@@ -8,10 +8,9 @@ type Props = TouchableOpacityProps & {
   onRemove:()=>void;
 }
  
-export function TripCard({ title, onRemove}: Props) {
+export function TripCard({ title, onRemove,...rest}: Props) {
   return (
-    <Container>
-
+    <Container {...rest}>
       <Icon name="airplanemode-active" />
       <Title>{title}</Title>
       <ButtonIcon onPress={onRemove} />

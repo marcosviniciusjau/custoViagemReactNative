@@ -15,7 +15,7 @@ import { Header } from "@components/header"
 import { Containers, IconGas, IconMap, IconMoney } from "./styles"
 import { Label } from "@components/label"
 import { tripsGetAll } from "@storage/trip/tripsGetAll"
-import { FlatList } from "react-native"
+import { Alert, FlatList } from "react-native"
 
 import { tripEdit } from "@storage/trip/tripEdit"
 import { TripCalculateCard } from "@components/TripCalculateCard"
@@ -36,7 +36,10 @@ export function EditTrip() {
 
   async function setUpdatedFields() {
     try {
-      await tripEdit({ title, ...editedValues })
+      await tripEdit({
+        title, ...editedValues
+      })
+Alert.alert("Editar viagem", "Sua viagem foi editada com sucesso!")
 
       navigation.navigate("trips", {
         title,

@@ -11,3 +11,9 @@ export const Labels = styled.Text`
   font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
   margin-bottom: 13px;
 `
+export const Error = styled.Text`
+  font-size: ${({ theme }) => theme.FONT_SIZE.SM}px;
+  color: ${({ theme }) => theme.COLORS.RED};
+  font-family: ${({ theme }) => theme.FONT_FAMILY.BOLD};
+  margin-left: 5px;
+`

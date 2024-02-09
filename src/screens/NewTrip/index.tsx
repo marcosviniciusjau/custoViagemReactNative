@@ -10,6 +10,7 @@ import {Input as NativeBaseInput,ScrollView} from "native-base"
 import { Header } from "@components/header"
 import { Containers, IconGas, IconMap, IconMoney } from "./styles"
 import { Label } from "@components/label"
+import { Alert } from "react-native"
 
 type RouteParams= {
   title:string;
@@ -29,13 +30,51 @@ export function NewTrip() {
   const [fuel, setFuel] = useState<NumericValue>(0.0)
   const [local, setLocal] = useState("")
   const [toll, setToll] = useState<NumericValue>(0.0)
+  
+  const [lengthValid, setLengthValid] = useState(false)
+  
+  const [originValid, setOriginValid] = useState(false)
+  const [destinyValid, setDestinyValid] = useState(false)
+  const [distanceValid, setDistanceValid] = useState(false)
+  const [efficiencyValid, setEfficiencyValid] = useState(false)
+  const [fuelValid, setFuelValid] = useState(false)
+  const [localValid, setLocalValid] = useState(false)
+  const [tollValid, setTollValid] = useState(false)
+
+const areAllFieldsValid = () => {
+  return (
+    originValid &&
+    destinyValid &&
+    distanceValid &&
+    efficiencyValid &&
+    fuelValid &&
+    localValid &&
+    tollValid
+  )
+}
+useEffect(() => {
+  setLengthValid(true)
+    setOriginValid(true)
+    setDestinyValid(true)
+    setDistanceValid(true)
+    setEfficiencyValid(true)
+    setFuelValid(true)
+    setLocalValid(true)
+    setTollValid(true)
+}, [])
 
   useEffect(() => {
     if (Ititle) {
       setOrigin(parts[0])
-      setDestiny(parts[1])
+      setDestiny(parts[1]) 
+      setLengthValid(parts[0].trim().length > 2 && parts[1].trim().length > 2);
+      setOriginValid(parts[0].trim() !== "")
+
+      setDestinyValid(parts[1].trim() !== "")
     } else {
       setDestiny(title)
+      setDestinyValid(title.trim() !== "")
+      setLengthValid(title.trim().length > 2)
     }
   }, [Ititle, parts, title])
 
@@ -43,6 +82,10 @@ export function NewTrip() {
 
   async function handleNewTrip() {
     try {
+    if (!areAllFieldsValid()){
+      Alert.alert("Cadastrar viagem", "Preencha todos os campos!")
+      
+     }else{
       await tripCreate(
         title,
         origin,
@@ -53,13 +96,18 @@ export function NewTrip() {
         local,
         parseFloat(toll as string)
       )
+      Alert.alert("Cadastrar viagem", "Sua viagem foi cadastrada com sucesso!")
+
       navigation.navigate("trips", {
         title,
       })
+        
+    }
     } catch (error) {
       console.log(error)
     }
   }
+
 
   return (
     <ScrollView
@@ -76,54 +124,80 @@ export function NewTrip() {
           <IconMap />
         </Containers>
 
-        <Label label="Origem" />
+        <Label
+          label="Origem"
+          error={
+            originValid && lengthValid ? "" : "Preencha o campo corretamente"
+          }
+        />
 
         <NativeBaseInput
-          style={NativeInput}
-          onChangeText={setOrigin}
           mb={4}
+          size={3}
           placeholder="Origem da Viagem"
           color="white"
           autoCapitalize="sentences"
+          borderColor={originValid ? "blue.500" : "red.500"}
           _focus={{
             bg: "gray.800",
             borderWidth: 1,
             borderColor: "blue.500",
           }}
           value={origin}
+          onChangeText={(text) => {
+            setOrigin(text)
+            setOriginValid(text.trim() !== "" && text.length > 2)
+            setLengthValid(text.length > 2)
+          }}
         />
 
-        <Label label="Destino" />
+        <Label
+          label="Destino"
+          error={
+            destinyValid && lengthValid ? "" : "Preencha o campo corretamente"
+          }
+        />
 
         <NativeBaseInput
-          style={NativeInput}
           mb={4}
           placeholder="Destino da Viagem"
-          onChangeText={setDestiny}
           color="white"
           autoCapitalize="sentences"
+          borderColor={destinyValid ? "blue.500" : "red.500"}
           _focus={{
             bg: "gray.800",
             borderWidth: 1,
             borderColor: "blue.500",
           }}
           value={destiny}
+          onChangeText={(text) => {
+            setDestiny(text)
+            setDestinyValid(text.trim() !== "" && text.length > 2 )
+          }}
         />
 
-        <Label label="Distância" />
+        <Label
+          label="Distância"
+          error={
+            distanceValid && lengthValid ? "" : "Preencha o campo corretamente"
+          }
+        />
 
         <NativeBaseInput
-          style={NativeInput}
           mb={4}
           placeholder="Distância da Viagem"
-          onChangeText={(text) => setDistance(Number(text))}
           keyboardType="numeric"
           autoCapitalize="sentences"
           color="white"
+          borderColor={distanceValid ? "blue.500" : "red.500"}
           _focus={{
             bg: "gray.800",
             borderWidth: 1,
             borderColor: "blue.500",
+          }}
+          onChangeText={(text) => {
+            setDistance(Number(text))
+            setDistanceValid(text.trim() !== "")
           }}
         />
 
@@ -132,14 +206,20 @@ export function NewTrip() {
           <IconGas />
         </Containers>
 
-        <Label label="Eficiência por km/l" />
+        <Label
+          label="Eficiência por km/l"
+          error={efficiencyValid ? "" : "Preencha o campo corretamente"}
+        />
 
         <NativeBaseInput
-          style={NativeInput}
           mb={4}
           placeholder="Km/l"
-          onChangeText={(text) => setEfficiency(Number(text))}
+          onChangeText={(text) => {
+            setEfficiency(text)
+            setEfficiencyValid(text.trim() !== "")
+          }}
           keyboardType="numeric"
+          borderColor={efficiencyValid ? "blue.500" : "red.500"}
           autoCapitalize="sentences"
           color="white"
           _focus={{
@@ -149,12 +229,18 @@ export function NewTrip() {
           }}
         />
 
-        <Label label="Preço combustivel" />
+        <Label
+          label="Preço combustivel"
+          error={fuelValid ? "" : "Preencha o campo corretamente"}
+        />
 
         <NativeBaseInput
-          style={NativeInput}
           mb={4}
-          onChangeText={(text) => setFuel(Number(text))}
+          onChangeText={(text) => {
+            setFuel(text)
+            setFuelValid(text.trim() !== "")
+          }}
+          borderColor={fuelValid ? "blue.500" : "red.500"}
           placeholder="Preço do combustivel"
           color="white"
           keyboardType="numeric"
@@ -171,29 +257,43 @@ export function NewTrip() {
           <IconMoney />
         </Containers>
 
-        <Label label="Localização Pedágio" />
+        <Label
+          label="Localização Pedágio"
+          error={
+            localValid && lengthValid ? "" : "Preencha o campo corretamente"
+          }
+        />
 
         <NativeBaseInput
-          style={NativeInput}
           mb={4}
           placeholder="Localização do Pedágio"
-          onChangeText={setLocal}
+          onChangeText={(text) => {
+            setLocal(text)
+            setLocalValid(text.trim() !== "" && text.length > 2)
+          }}
+          borderColor={localValid ? "blue.500" : "red.500"}
           color="white"
           autoCapitalize="sentences"
           _focus={{
             bg: "gray.800",
             borderWidth: 1,
-            borderColor: "blue.500",
+            borderColor: localValid ? "blue.500" : "red.500",
           }}
         />
 
-        <Label label="Preço pedágio" />
+        <Label
+          label="Preço pedágio"
+          error={tollValid ? "" : "Preencha o campo corretamente"}
+        />
 
         <NativeBaseInput
-          style={NativeInput}
           mb={4}
           placeholder="Preço do pedágio"
-          onChangeText={(text) => setToll(Number(text))}
+          onChangeText={(text) => {
+            setToll(Number(text))
+            setTollValid(text.trim() !== "")
+          }}
+          borderColor={tollValid ? "blue.500" : "red.500"}
           color="white"
           autoCapitalize="sentences"
           keyboardType="numeric"
@@ -209,7 +309,6 @@ export function NewTrip() {
           style={{ marginTop: 20 }}
           onPress={handleNewTrip}
         />
-        
       </Container>
     </ScrollView>
   )
