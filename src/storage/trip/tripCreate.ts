@@ -11,18 +11,18 @@ export async function tripCreate(
     distance: number,
     efficiency: number,
     fuel: number,
-    local: string,
-    toll: number
+    tolls: { local: string; cost: number }[]
   )
    {
   try {
     const storedTrips = await tripsGetAll()
 
-    const newTrip = {title,origin, destiny, distance, efficiency, fuel, local, toll}
+    const newTrip = {title,origin, destiny, distance, efficiency, fuel, tolls}
     const updatedTrips = [...storedTrips, newTrip]
 
     const storage = JSON.stringify(updatedTrips)
     console.log(storage)
+    
 
     await AsyncStorage.setItem(TRIP_COLLECTION, storage)
     

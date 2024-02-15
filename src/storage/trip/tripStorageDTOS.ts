@@ -6,6 +6,8 @@ export type TripStorageDTO = {
   distance:number
   efficiency:number
   fuel:number
-  local:string
-  toll:number
+  tolls:{
+    local:string
+    cost:number
+  }
 }

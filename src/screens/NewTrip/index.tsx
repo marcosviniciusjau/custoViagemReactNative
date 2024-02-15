@@ -10,7 +10,7 @@ import {Input as NativeBaseInput,ScrollView} from "native-base"
 import { Header } from "@components/header"
 import { Containers, IconGas, IconMap, IconMoney } from "./styles"
 import { Label } from "@components/label"
-import { Alert } from "react-native"
+import { Alert, View } from "react-native"
 
 type RouteParams= {
   title:string;
@@ -30,7 +30,7 @@ export function NewTrip() {
   const [fuel, setFuel] = useState<NumericValue>(0.0)
   const [local, setLocal] = useState("")
   const [toll, setToll] = useState<NumericValue>(0.0)
-  
+  const [tolls, setTolls] = useState([{ local: "", cost: 0.0 }])
   const [lengthValid, setLengthValid] = useState(false)
   
   const [originValid, setOriginValid] = useState(false)
@@ -40,6 +40,16 @@ export function NewTrip() {
   const [fuelValid, setFuelValid] = useState(false)
   const [localValid, setLocalValid] = useState(false)
   const [tollValid, setTollValid] = useState(false)
+  
+  const handleTollChange = (text: string, field: string, index: number) => {
+    const updatedTolls = [...tolls]
+    updatedTolls[index][field] = text
+    setTolls(updatedTolls)
+  }
+
+const addNewToll = () => {
+  setTolls([...tolls, { local: "", cost: 0.0 }])
+}
 
 const areAllFieldsValid = () => {
   return (
@@ -47,9 +57,7 @@ const areAllFieldsValid = () => {
     destinyValid &&
     distanceValid &&
     efficiencyValid &&
-    fuelValid &&
-    localValid &&
-    tollValid
+    fuelValid
   )
 }
 useEffect(() => {
@@ -59,8 +67,6 @@ useEffect(() => {
     setDistanceValid(true)
     setEfficiencyValid(true)
     setFuelValid(true)
-    setLocalValid(true)
-    setTollValid(true)
 }, [])
 
   useEffect(() => {
@@ -93,8 +99,7 @@ useEffect(() => {
         parseFloat(distance as string),
         parseFloat(efficiency as string),
         parseFloat(fuel as string),
-        local,
-        parseFloat(toll as string)
+        tolls
       )
       Alert.alert("Cadastrar viagem", "Sua viagem foi cadastrada com sucesso!")
 
@@ -256,53 +261,49 @@ useEffect(() => {
           <Title title="Pedágios" />
           <IconMoney />
         </Containers>
+      
 
-        <Label
-          label="Localização Pedágio"
-          error={
-            localValid && lengthValid ? "" : "Preencha o campo corretamente"
-          }
+        {tolls.map((toll, index) => (
+          <View key={index}>
+            <Label label={`Localização Pedágio ${index + 1}`} error={""} />
+            <NativeBaseInput
+              style={NativeInput}
+              mb={4}
+              placeholder={`Localização do Pedágio ${index + 1}`}
+              onChangeText={(text) => handleTollChange(text, "local", index)}
+              color="white"
+              autoCapitalize="sentences"
+              _focus={{
+                bg: "gray.800",
+                borderWidth: 1,
+                borderColor: "blue.500",
+              }}
+            />
+
+            <Label label={`Preço Pedágio ${index + 1}`} error={""} />
+            <NativeBaseInput
+              style={NativeInput}
+              mb={4}
+              placeholder={`Preço do Pedágio ${index + 1}`}
+              onChangeText={(text) => handleTollChange(text, "cost", index)}
+              color="white"
+              autoCapitalize="sentences"
+              keyboardType="numeric"
+              _focus={{
+                bg: "gray.800",
+                borderWidth: 1,
+                borderColor: "blue.500",
+              }}
+            />
+          </View>
+        ))}
+
+        <Button
+          title="Adicionar Pedágio"
+          style={{ marginTop: 20, marginBottom: 10 }}
+          onPress={addNewToll}
         />
 
-        <NativeBaseInput
-          mb={4}
-          placeholder="Localização do Pedágio"
-          onChangeText={(text) => {
-            setLocal(text)
-            setLocalValid(text.trim() !== "" && text.length > 2)
-          }}
-          borderColor={localValid ? "blue.500" : "red.500"}
-          color="white"
-          autoCapitalize="sentences"
-          _focus={{
-            bg: "gray.800",
-            borderWidth: 1,
-            borderColor: localValid ? "blue.500" : "red.500",
-          }}
-        />
-
-        <Label
-          label="Preço pedágio"
-          error={tollValid ? "" : "Preencha o campo corretamente"}
-        />
-
-        <NativeBaseInput
-          mb={4}
-          placeholder="Preço do pedágio"
-          onChangeText={(text) => {
-            setToll(Number(text))
-            setTollValid(text.trim() !== "")
-          }}
-          borderColor={tollValid ? "blue.500" : "red.500"}
-          color="white"
-          autoCapitalize="sentences"
-          keyboardType="numeric"
-          _focus={{
-            bg: "gray.800",
-            borderWidth: 1,
-            borderColor: "blue.500",
-          }}
-        />
 
         <Button
           title="Criar nova viagem"
