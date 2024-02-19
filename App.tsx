@@ -1,7 +1,7 @@
-import { ActivityIndicator } from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import theme from "./src/theme";
 
+import { Loading } from "@components/loading";
 import {
   useFonts,
   Roboto_400Regular,
@@ -22,8 +22,8 @@ export default function App() {
           barStyle="light-content"
           backgroundColor="transparent"
           translucent
-        ></StatusBar>
-        { fontsLoaded ? <Routes /> : <ActivityIndicator/>}
+        />
+        { fontsLoaded ? <Routes /> : <Loading/>}
       </NativeBaseProvider>
     </ThemeProvider>
   )
