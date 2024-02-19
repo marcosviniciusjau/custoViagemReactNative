@@ -19,6 +19,7 @@ Navigation
 React Navigation: To provide seamless navigation within the app, React Navigation is implemented, delivering a smooth user experience.**
 
 # 🎥 Demo Video
-Watch a demonstration of App in action here:.
+Watch a demonstration of App in action here:
+
 https://github.com/marcosviniciusjau/custoViagemReactNative/assets/82465988/9c450749-5e9b-4e25-8648-59acf31f99b4
 
