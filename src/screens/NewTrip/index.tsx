@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigation, useRoute } from "@react-navigation/native"
 
 import { tripCreate } from "@storage/trip/tripCreate"
-import { Container, NativeInput } from "./styles"
+import { Container, ContainersToll } from "./styles"
 import { Button } from "@components/button"
 import { Title } from "@components/title"
 import {Input as NativeBaseInput,ScrollView} from "native-base"
@@ -11,6 +11,7 @@ import { Header } from "@components/header"
 import { Containers, IconGas, IconMap, IconMoney } from "./styles"
 import { Label } from "@components/label"
 import { Alert, View } from "react-native"
+import { ButtonIcon } from "@components/ButtonIcon"
 
 type RouteParams= {
   title:string;
@@ -48,7 +49,11 @@ export function NewTrip() {
   }
 
 const addNewToll = () => {
-  setTolls([...tolls, { local: "", cost: 0.0 }])
+  try{
+    setTolls([...tolls, { local: "", cost: 0.0 }])
+  }catch(error){
+    console.log(error)
+  }
 }
 
 const areAllFieldsValid = () => {
@@ -257,17 +262,17 @@ useEffect(() => {
           }}
         />
 
-        <Containers>
+        <ContainersToll>
           <Title title="Pedágios" />
           <IconMoney />
-        </Containers>
+          <ButtonIcon icon="add" onPress={addNewToll} />
+        </ContainersToll>
       
 
         {tolls.map((toll, index) => (
           <View key={index}>
             <Label label={`Localização Pedágio ${index + 1}`} error={""} />
             <NativeBaseInput
-              style={NativeInput}
               mb={4}
               placeholder={`Localização do Pedágio ${index + 1}`}
               onChangeText={(text) => handleTollChange(text, "local", index)}
@@ -282,7 +287,6 @@ useEffect(() => {
 
             <Label label={`Preço Pedágio ${index + 1}`} error={""} />
             <NativeBaseInput
-              style={NativeInput}
               mb={4}
               placeholder={`Preço do Pedágio ${index + 1}`}
               onChangeText={(text) => handleTollChange(text, "cost", index)}
@@ -298,12 +302,7 @@ useEffect(() => {
           </View>
         ))}
 
-        <Button
-          title="Adicionar Pedágio"
-          style={{ marginTop: 20, marginBottom: 10 }}
-          onPress={addNewToll}
-        />
-
+      
 
         <Button
           title="Criar nova viagem"

@@ -7,10 +7,26 @@ export const Container = styled.View`
   padding: 24px;
 `
 export const Containers = styled.View`
+  width: 95%;
+
+  flex-direction: row;
+
+  align-items: center;
+  justify-content: center;
+`
+export const ContainersCalculate = styled.View`
   width: 100%;
 
   flex-direction: row;
 
+  align-items: center;
+  justify-content: center;
+`
+export const ContainersToll = styled.View`
+  width: 70%;
+  flex-direction: row;
+  margin-left:17%;
+  gap:10px;
   align-items: center;
   justify-content: center;
 `

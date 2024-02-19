@@ -1,4 +1,4 @@
-import { GasPump, MapPin, Money } from "phosphor-react-native";
+import { GasPump, MapPin, Money, PlusCircle } from "phosphor-react-native";
 import styled from "styled-components/native"
 
 export const Container = styled.View`
@@ -11,6 +11,15 @@ export const Containers = styled.View`
 
   flex-direction: row;
 
+  align-items: center;
+  justify-content: center;
+`
+export const ContainersToll = styled.View`
+  width: 70%;
+
+  flex-direction: row;
+  margin-left:17%;
+  gap:10px;
   align-items: center;
   justify-content: center;
 `
@@ -54,3 +63,4 @@ export const IconMoney = styled(Money).attrs(({ theme }) => ({
   size: 36,
   color: theme.COLORS.WHITE,
 }))``
+

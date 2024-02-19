@@ -5,7 +5,7 @@ import {
   useRoute,
 } from "@react-navigation/native"
 
-import { Container } from "./styles"
+import { Container, ContainersCalculate, ContainersToll } from "./styles"
 import { Button } from "@components/button"
 import { Title } from "@components/title"
 
@@ -19,6 +19,7 @@ import { Alert, FlatList, View } from "react-native"
 
 import { tripEdit } from "@storage/trip/tripEdit"
 import { TripCalculateCard } from "@components/TripCalculateCard"
+import { ButtonIcon } from "@components/ButtonIcon"
 
 type RouteParams = {
   title: string
@@ -30,7 +31,7 @@ export function EditTrip() {
   const { title } = route.params as RouteParams
 
   const navigation = useNavigation()
-  const [editedValues, setEditedValues] = useState({ tolls: [] });
+  const [editedValues, setEditedValues] = useState([]);
   const [trips, setTrips] = useState<object[]>([])
   const [calculatedCardsRendered] = useState(false)
   const [tolls, setTolls] = useState([{ local: "", cost: 0.0 }]);
@@ -44,8 +45,11 @@ export function EditTrip() {
   };
   
   const addNewToll = () => {
-    setTolls([...tolls, { local: "", cost: 0.0 }])
- 
+    try{
+      setTolls([...tolls, { local: "", cost: 0.0 }])
+    }catch(error){
+      console.error(error)
+    }
   }
   
   async function setUpdatedFields() {
@@ -126,14 +130,14 @@ export function EditTrip() {
                   <>
                     {key === "title" && !calculatedCardsRendered && (
                       <>
-                        <Containers>
+                        <ContainersCalculate>
                           <TripCalculateCard
                             title=""
                             value={`Combustível: ${(item.distance / item.efficiency) * item.fuel}`} />
                           <TripCalculateCard
                             title={"Gastos com Pedágio"}
                             value={`Pedágio: ${totalTollCost}`} />
-                        </Containers>
+                        </ContainersCalculate>
                       </>
                     )}
                     {key === "efficiency" && (
@@ -171,10 +175,11 @@ export function EditTrip() {
                 
                {title === item.title && item.tolls.map((toll, index) => (
                 <View key={index}>
-                  <Containers>
-                    <Title title=" Pedágio" />
+                   <ContainersToll>
+                    <Title title="Pedágios" />
                     <IconMoney />
-                  </Containers>
+                    <ButtonIcon icon="add" onPress={addNewToll} />
+                </ContainersToll>
 
                   <Label label={`Localização Pedágio ${index + 1}`} />
                   <NativeBaseInput
@@ -209,11 +214,7 @@ export function EditTrip() {
                 </View>
               ))}
 
-              <Button
-                title="Adicionar Pedágio"
-                style={{ marginTop: 20, marginBottom: 10 }}
-                onPress={addNewToll}
-              />
+           
             </><>
             
               </>
@@ -223,6 +224,7 @@ export function EditTrip() {
 
         <Button
           title="Salvar Edições"
+          style={{marginTop:20}}
           onPress={() => {
             setUpdatedFields()
           }}
