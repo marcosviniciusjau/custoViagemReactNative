@@ -13,7 +13,7 @@ import { Input as NativeBaseInput, ScrollView } from "native-base"
 
 import { Header } from "@components/header"
 import { Containers, IconGas, IconMap, IconMoney } from "./styles"
-import { Label } from "@components/label"
+import { LabelEdit } from "@components/label_edit"
 import { tripsGetAll } from "@storage/trip/tripsGetAll"
 import { Alert, FlatList, View } from "react-native"
 
@@ -41,6 +41,7 @@ export function EditTrip() {
   const handleTollChange = (text: string, field: string, index: number) => {
     const updatedTolls = [...tolls];
     updatedTolls[index][field] = field === "cost" ? parseFloat(text) : text;
+  
     setTolls(updatedTolls);
   };
   
@@ -55,13 +56,14 @@ export function EditTrip() {
   async function setUpdatedFields() {
     try {
       await tripEdit({
-        title, ...editedValues
+        title, 
+        ...editedValues
       })
       Alert.alert("Editar viagem", "Sua viagem foi editada com sucesso!")
 
       navigation.navigate("trips", {
         title,
-      })
+        })
     } catch (error) {
       console.log(error)
     }
@@ -99,14 +101,11 @@ export function EditTrip() {
   )
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      showsHorizontalScrollIndicator={false}
-    >
+
       <Container>
         <Header showBackButton />
 
-        <Label label="Cálculo de Gastos:" />
+        <LabelEdit label="Cálculo de Gastos:" />
         <FlatList
           data={
             trips as Array<{
@@ -142,7 +141,7 @@ export function EditTrip() {
                     )}
                     {key === "efficiency" && (
                       <Containers>
-                        <Title title=" Combustivel" />
+                        <Title title=" Combustível" />
                         <IconGas />
                       </Containers>
                     )}
@@ -153,7 +152,7 @@ export function EditTrip() {
                       </Containers>
                     )}
                
-                    <Label label={capitalizeFirstLetter(`${key}`)} />
+                    <LabelEdit label={capitalizeFirstLetter(`${key}`)} />
 
                     <NativeBaseInput
                       mb={4}
@@ -168,7 +167,6 @@ export function EditTrip() {
                         borderWidth: 1,
                         borderColor: "blue.500",
                       }}
-                      key={key}
                       value={value.toString()} />
                   </>
                 ))}
@@ -181,11 +179,13 @@ export function EditTrip() {
                     <ButtonIcon icon="add" onPress={addNewToll} />
                 </ContainersToll>
 
-                  <Label label={`Localização Pedágio ${index + 1}`} />
+                  <LabelEdit label={`Localização Pedágio ${index + 1}`} />
                   <NativeBaseInput
                     mb={4}
                     placeholder={`Localização do Pedágio ${index + 1}`}
-                    onChangeText={(text) => handleTollChange(text, "local", index)}
+                    onChangeText={(text) => {
+                      handleTollChange(text, "local", index)
+                    } }
                     color="white"
                     autoCapitalize="sentences"
                     _focus={{
@@ -193,10 +193,11 @@ export function EditTrip() {
                       borderWidth: 1,
                       borderColor: "blue.500",
                     }}
+                    key={toll.local}
                     value={toll.local}
                   />
 
-                  <Label label={`Preço Pedágio ${index + 1}`} />
+                  <LabelEdit label={`Preço Pedágio ${index + 1}`} />
                   <NativeBaseInput
                     mb={4}
                     placeholder={`Preço do Pedágio ${index + 1}`}
@@ -209,14 +210,12 @@ export function EditTrip() {
                       borderWidth: 1,
                       borderColor: "blue.500",
                     }}
+                    key={toll.cost.toString()}
                     value={toll.cost.toString()}
                   />
                 </View>
               ))}
-
-           
             </><>
-            
               </>
               </>
           )}
@@ -230,6 +229,5 @@ export function EditTrip() {
           }}
         />
       </Container>
-    </ScrollView>
   )
 }

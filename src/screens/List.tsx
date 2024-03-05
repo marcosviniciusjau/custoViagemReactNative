@@ -5,13 +5,16 @@ import { Container } from "./styles"
 
 import { Alert, FlatList } from "react-native"
 
-import { TripCard } from "@components/TripCard"
-import { ListEmpty } from "@components/ListEmpty"
 import { tripsGetAll } from "@storage/trip/tripsGetAll"
 import { tripDelete } from "@storage/trip/tripDelete"
+
+import { TripCard } from "@components/TripCard"
+import { ListEmpty } from "@components/ListEmpty"
 import { Button } from "@components/button"
+import { Loading } from "@components/loading"
 
 export function List() {
+  const [isLoading, setIsLoading] = useState(true)
   const [trips, setTrips] = useState<object[]>([])
 
   const navigation = useNavigation()
@@ -36,9 +39,7 @@ export function List() {
           await tripDelete(title)
 
           fetchTrips()
-
-          Alert.alert("Remover viagem", "Sua viagem foi removida com sucesso!")
-          },
+         },
         },
       ])
     } catch (error) {
@@ -50,10 +51,18 @@ export function List() {
 
   async function fetchTrips() {
     try {
+      setIsLoading(true)
+
       const data = await tripsGetAll()
+
       setTrips(data)
+      setIsLoading(false)
     } catch (error) {
+      Alert.alert("Listagem de viagens", "Não foi possível encontrar viagens")
       console.log(error)
+    }
+    finally{
+      setIsLoading(false)
     }
   }
 
@@ -73,6 +82,9 @@ export function List() {
 
   return (
     <Container>
+      {
+        isLoading ? <Loading /> : 
+     
       <FlatList
         data={
           trips as Array<{
@@ -90,6 +102,7 @@ export function List() {
         renderItem={({ item }) => (
           <TripCard
             title={item.title}
+            key={item.title}
             onPress={() => handleOpenTrip(item.title)}
             onRemove={() => handleRemoveTrip(item.title)}
           />
@@ -102,6 +115,7 @@ export function List() {
           </>
         )}
       />
+    }
     </Container>
   )
 }

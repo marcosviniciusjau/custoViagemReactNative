@@ -9,9 +9,10 @@ import { Input as NativeBaseInput } from "native-base"
 import { Header } from "@components/header"
 import { Alert } from "react-native"
 
+import { tripTitleCreate } from "@storage/tripTitle/tripTitleCreate"
+import { AppError } from "@utils/AppError"
 export function Home() {
     useEffect(() => {
-      setTitle("")
       setTitleValid(true)
       setLengthValid(true)
     }, [])
@@ -21,22 +22,29 @@ export function Home() {
   const [titleValid, setTitleValid] = useState(false)
   
   const [lengthValid, setLengthValid] = useState(false)
+
+  const [sameTitle, setSameTitle] = useState(false)
+
   const navigation = useNavigation()
 
-  function handleNewTrip() {
+  async function handleNewTrip() {
     try {
-      if (!titleValid) {
+      if (title.trim().length === 0) {
         Alert.alert("Cadastrar viagem", "Preencha o campo do nome da viagem!")
       }
-       else if (!lengthValid) {
+      else if (!lengthValid) {
          Alert.alert("Cadastrar viagem", "Digite um nome com mais de duas palavras!")
-       } else {
-         navigation.navigate("new", {
-           title,
-         })
-       }
+      } else {
+        await tripTitleCreate(title)
+        navigation.navigate("new", {title})
+      }
     } catch (error) {
-      console.log(error)
+      if(error instanceof AppError) {
+       Alert.alert('Nova Viagem', error.message);
+      } else {
+        Alert.alert('Nova Viagem', 'Não foi possível criar uma nova viagem.');
+        console.log(error);
+      }
     }
   }
 

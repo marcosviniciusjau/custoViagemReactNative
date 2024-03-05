@@ -2,16 +2,18 @@ import { useEffect, useState } from "react"
 import { useNavigation, useRoute } from "@react-navigation/native"
 
 import { tripCreate } from "@storage/trip/tripCreate"
+import { tripTitleDelete } from "@storage/tripTitle/tripTitleDelete"
 import { Container, ContainersToll } from "./styles"
 import { Button } from "@components/button"
 import { Title } from "@components/title"
 import {Input as NativeBaseInput,ScrollView} from "native-base"
 
-import { Header } from "@components/header"
+import { HeaderNew } from "@components/header_new"
 import { Containers, IconGas, IconMap, IconMoney } from "./styles"
 import { Label } from "@components/label"
 import { Alert, View } from "react-native"
 import { ButtonIcon } from "@components/ButtonIcon"
+import { AppError } from "@utils/AppError"
 
 type RouteParams= {
   title:string;
@@ -48,31 +50,32 @@ export function NewTrip() {
     setTolls(updatedTolls)
   }
 
-const addNewToll = () => {
-  try{
-    setTolls([...tolls, { local: "", cost: 0.0 }])
-  }catch(error){
-    console.log(error)
+  const addNewToll = () => {
+    try{
+      setTolls([...tolls, { local: "", cost: 0.0 }])
+    }catch(error){
+      console.log(error)
+    }
   }
-}
 
-const areAllFieldsValid = () => {
-  return (
-    originValid &&
-    destinyValid &&
-    distanceValid &&
-    efficiencyValid &&
-    fuelValid
-  )
-}
-useEffect(() => {
-  setLengthValid(true)
-    setOriginValid(true)
-    setDestinyValid(true)
-    setDistanceValid(true)
-    setEfficiencyValid(true)
-    setFuelValid(true)
-}, [])
+  const areAllFieldsValid = () => {
+    return (
+      originValid &&
+      destinyValid &&
+      distanceValid &&
+      efficiencyValid &&
+      fuelValid
+    )
+  }
+
+  useEffect(() => {
+    setLengthValid(false)
+      setOriginValid(false)
+      setDestinyValid(false)
+      setDistanceValid(false)
+      setEfficiencyValid(false)
+      setFuelValid(false)
+  }, [])
 
   useEffect(() => {
     if (Ititle) {
@@ -80,44 +83,74 @@ useEffect(() => {
       setDestiny(parts[1]) 
       setLengthValid(parts[0].trim().length > 2 && parts[1].trim().length > 2);
       setOriginValid(parts[0].trim() !== "")
-
       setDestinyValid(parts[1].trim() !== "")
     } else {
       setDestiny(title)
       setDestinyValid(title.trim() !== "")
       setLengthValid(title.trim().length > 2)
     }
-  }, [Ititle, parts, title])
+    }, [Ititle, parts, title])
 
-  const navigation = useNavigation()
+    const navigation = useNavigation()
 
-  async function handleNewTrip() {
-    try {
-    if (!areAllFieldsValid()){
-      Alert.alert("Cadastrar viagem", "Preencha todos os campos!")
-      
-     }else{
-      await tripCreate(
-        title,
-        origin,
-        destiny,
-        parseFloat(distance as string),
-        parseFloat(efficiency as string),
-        parseFloat(fuel as string),
-        tolls
-      )
-      Alert.alert("Cadastrar viagem", "Sua viagem foi cadastrada com sucesso!")
-
-      navigation.navigate("trips", {
-        title,
-      })
-        
+    async function handleNewTrip() {
+      try {
+      if (!areAllFieldsValid()){
+        Alert.alert("Cadastrar viagem", "Preencha todos os campos!")
+      }else{
+        await tripCreate(
+          title,
+          origin,
+          destiny,
+          parseFloat(distance as string),
+          parseFloat(efficiency as string),
+          parseFloat(fuel as string),
+          tolls
+        )
+        setOrigin('')
+        setDestiny('')
+        setDistance(0)
+        setEfficiency(0)
+        setFuel(0)
+        setTolls([{ local: "", cost: 0.0 }])
+        Alert.alert("Cadastrar viagem", "Sua viagem foi cadastrada com sucesso!")
+        navigation.navigate("trips", {
+          title,
+        })
+          
+      }
+      } catch (error) {
+        console.log(error)
+      }
     }
-    } catch (error) {
-      console.log(error)
+    async function tripTitleRemove() {
+      try {
+        await tripTitleDelete(title)
+        navigation.navigate('home')
+  
+      } catch (error) {
+        console.log(error);
+        Alert.alert('Remover Titulo', 'Não foi possível remover o titulo!');
+      }
     }
-  }
-
+const confirmAndDeleteTitle = () => {
+    Alert.alert(
+      "Confirmar Exclusão",
+      "Tem certeza de que deseja excluir o título?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Sim",
+          onPress: () => {
+            tripTitleRemove()
+          },
+        },
+      ]
+    );
+  };
 
   return (
     <ScrollView
@@ -125,7 +158,7 @@ useEffect(() => {
       showsHorizontalScrollIndicator={false}
     >
       <Container>
-        <Header showBackButton />
+        <HeaderNew showBackButton onPress={confirmAndDeleteTitle}/>
 
         <Title title={title} />
 
@@ -212,7 +245,7 @@ useEffect(() => {
         />
 
         <Containers>
-          <Title title=" Combustivel" />
+          <Title title="Combustível" />
           <IconGas />
         </Containers>
 
@@ -240,7 +273,7 @@ useEffect(() => {
         />
 
         <Label
-          label="Preço combustivel"
+          label="Preço combustível"
           error={fuelValid ? "" : "Preencha o campo corretamente"}
         />
 
@@ -251,7 +284,7 @@ useEffect(() => {
             setFuelValid(text.trim() !== "")
           }}
           borderColor={fuelValid ? "blue.500" : "red.500"}
-          placeholder="Preço do combustivel"
+          placeholder="Preço do combustível"
           color="white"
           keyboardType="numeric"
           autoCapitalize="sentences"
